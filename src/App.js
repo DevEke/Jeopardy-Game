@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.scss";
+import { Component } from "react";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import GameBoard from "./GameBoard";
+import Question from "./Question";
+import { questions } from "./questions";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      questions: questions
+    };
+  }
+
+  render() {
+    const { questions } = this.state;
+    return (
+      <div className="app__wrapper">
+      <Router>
+        <Route
+          exact
+          path="/"
+          render={() => <GameBoard questions={questions} />}
+        />
+        <Route
+          path="/:catergory"
+          render={({ match }) => (
+            <Question
+              question={questions.find(
+                (question) => question.catergory === match.params.catergory
+              )}
+            />
+          )}
+        />
+      </Router>
+      </div>
+    );
+  }
 }
 
 export default App;
+
